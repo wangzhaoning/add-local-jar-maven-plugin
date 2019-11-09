@@ -1,0 +1,1 @@
+# add-local-jar-maven-plugin
