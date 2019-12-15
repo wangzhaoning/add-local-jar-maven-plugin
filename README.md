@@ -1,6 +1,10 @@
 # add-local-jar-maven-plugin
 
+It only works on `windows 64`
+
 this plugin could help you add local jar in local .m2
+
+
 
 If you do it manually, you need to:
 `mvn install:install-file -Dfile=<path-to-file> -DgroupId=<group-id> -DartifactId=<artifact-id> -Dversion=<version> -Dpackaging=<packaging>`
@@ -39,7 +43,7 @@ so you must clone my repository and in terminal execute:
 in terminal execute:
 `mvn org.wzn.plugin:add-local-jar-maven-plugin:1.0-SNAPSHOT:wzn-plugin`
 
-in screen will give you answer about how to add dependency
+in screen, will give you result about your local jar that success add in .m2
 
 for example:
 
