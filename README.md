@@ -1,4 +1,9 @@
+
+
 # add-local-jar-maven-plugin
+![](https://img.shields.io/badge/platform-windows-lightgrey.svg)
+![](https://img.shields.io/badge/language-Java-orange.svg)
+![](https://img.shields.io/badge/license-MIT-000000.svg)
 
 It only works on `windows 64`
 
@@ -43,7 +48,7 @@ so you must clone my repository and in terminal execute:
 in terminal execute:
 `mvn org.wzn.plugin:add-local-jar-maven-plugin:1.0-SNAPSHOT:wzn-plugin`
 
-in screen, will give you result about your local jar that success add in .m2
+the terminal will give you result about your local jar that success add in .m2
 
 for example:
 
