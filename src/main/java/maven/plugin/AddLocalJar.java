@@ -8,6 +8,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * add local jar in you dependencies.
@@ -73,18 +75,10 @@ public class AddLocalJar extends AbstractMojo {
 
 
     private List<String> getFiles() {
-        List<String> files = new ArrayList<>();
-        File file = new File(path);
-        File[] tempList = file.listFiles();
-
+        File[] tempList = new File(path).listFiles();
         assert tempList != null;
-        for (File value : tempList) {
-            if (value.isFile()) {
-                String fileName = value.getName();
-                files.add(fileName);
-            }
-        }
-        return files;
+
+        return Stream.of(tempList).filter(File::isFile).map(File::getName).collect(Collectors.toList());
     }
 
 
