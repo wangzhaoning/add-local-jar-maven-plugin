@@ -58,18 +58,22 @@ public class AddLocalJar extends AbstractMojo {
                     " -DartifactId=" + newNamesPre.get(i) + " -Dversion=1.0 -Dpackaging=jar");
             commands.add("mvn install:install-file -Dfile=" + newNames.get(i) + " -DgroupId=" + newNamesPre.get(i) +
                     " -DartifactId=" + newNamesPre.get(i) + " -Dversion=1.0 -Dpackaging=jar");
-            ProcessBuilder pb = new ProcessBuilder(commands);
-            pb.directory(new File(path));
-            Process process = pb.start();
-            int status = process.waitFor();
-            InputStream in = process.getInputStream();
+            run(commands);
+        }
+    }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line = br.readLine();
-            while (line != null) {
-                System.out.println(line);
-                line = br.readLine();
-            }
+    private void run(List<String> commands) throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder(commands);
+        pb.directory(new File(path));
+        Process process = pb.start();
+        int status = process.waitFor();
+        InputStream in = process.getInputStream();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line = br.readLine();
+        while (line != null) {
+            System.out.println(line);
+            line = br.readLine();
         }
     }
 
@@ -95,18 +99,7 @@ public class AddLocalJar extends AbstractMojo {
             newFilePre.add(fileName[0]);
             commands.add("rename " + "\"" + file + "\"" + " " + "\"" + newFileName + "\"");
             newNames.add(newFileName);
-            ProcessBuilder pb = new ProcessBuilder(commands);
-            pb.directory(new File(path));
-            Process process = pb.start();
-            int status = process.waitFor();
-            InputStream in = process.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line = br.readLine();
-            while (line != null) {
-                System.out.println(line);
-                line = br.readLine();
-            }
+            run(commands);
         }
         result.add(newNames);
         result.add(newFilePre);
