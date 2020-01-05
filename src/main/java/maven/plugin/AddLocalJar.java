@@ -8,6 +8,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * add local jar in you dependencies.
@@ -56,35 +58,31 @@ public class AddLocalJar extends AbstractMojo {
                     " -DartifactId=" + newNamesPre.get(i) + " -Dversion=1.0 -Dpackaging=jar");
             commands.add("mvn install:install-file -Dfile=" + newNames.get(i) + " -DgroupId=" + newNamesPre.get(i) +
                     " -DartifactId=" + newNamesPre.get(i) + " -Dversion=1.0 -Dpackaging=jar");
-            ProcessBuilder pb = new ProcessBuilder(commands);
-            pb.directory(new File(path));
-            Process process = pb.start();
-            int status = process.waitFor();
-            InputStream in = process.getInputStream();
+            run(commands);
+        }
+    }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line = br.readLine();
-            while (line != null) {
-                System.out.println(line);
-                line = br.readLine();
-            }
+    private void run(List<String> commands) throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder(commands);
+        pb.directory(new File(path));
+        Process process = pb.start();
+        int status = process.waitFor();
+        InputStream in = process.getInputStream();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line = br.readLine();
+        while (line != null) {
+            System.out.println(line);
+            line = br.readLine();
         }
     }
 
 
     private List<String> getFiles() {
-        List<String> files = new ArrayList<>();
-        File file = new File(path);
-        File[] tempList = file.listFiles();
-
+        File[] tempList = new File(path).listFiles();
         assert tempList != null;
-        for (File value : tempList) {
-            if (value.isFile()) {
-                String fileName = value.getName();
-                files.add(fileName);
-            }
-        }
-        return files;
+
+        return Stream.of(tempList).filter(File::isFile).map(File::getName).collect(Collectors.toList());
     }
 
 
@@ -101,18 +99,7 @@ public class AddLocalJar extends AbstractMojo {
             newFilePre.add(fileName[0]);
             commands.add("rename " + "\"" + file + "\"" + " " + "\"" + newFileName + "\"");
             newNames.add(newFileName);
-            ProcessBuilder pb = new ProcessBuilder(commands);
-            pb.directory(new File(path));
-            Process process = pb.start();
-            int status = process.waitFor();
-            InputStream in = process.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line = br.readLine();
-            while (line != null) {
-                System.out.println(line);
-                line = br.readLine();
-            }
+            run(commands);
         }
         result.add(newNames);
         result.add(newFilePre);
